@@ -3,6 +3,7 @@
 from scipy.optimize import fsolve
 import numpy as np
 import matplotlib.pyplot as plt
+import streamlit as st
 
 
 def solve_s_c(C0_Cg, gamma):
@@ -104,6 +105,11 @@ if __name__ == '__main__':
 
     gamma = 1.05
     T0 = 2e6
+
+    # Add input fields for key parameters in the left sidebar
+    gamma = st.sidebar.slider('gamma', 1.0, 2.0, 1.05)
+    T0 = st.sidebar.slider('T0', 1e6, 3e6, 2e6)
+
     C0 = np.sqrt(gamma*kB*T0/mp)
     # C0_Cg = 0.8
     C0_Cg = C0/Cg
@@ -131,6 +137,7 @@ if __name__ == '__main__':
     plt.title('$\gamma=$'+str(gamma)+' $C_0/C_g=$'+"%.2f" % C0_Cg)
     # plt.grid()
     plt.box(on=True)
+    st.pyplot()
     plt.show()
     # plt.savefig("test.png")
     print(V02)
