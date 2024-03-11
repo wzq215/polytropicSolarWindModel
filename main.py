@@ -7,9 +7,12 @@ import matplotlib.pyplot as plt
 
 def solve_s_c(C0_Cg, gamma):
     '''
-    已知C_g/C_0，gamma，求s_c，根据如下方程求解
+    已知C_g/C_0, gamma, 求s_c.
+    根据如下方程求解:
     (1/2)*((C_g/C_0)**((4)/(gamma-1))*s_c**((2*(2*gamma-3))/(gamma-1))-1)+(1)/(gamma-1)*((C_0**2)/(C_g**2)*s_c-1)-2*(s_c-1)=0
-    当(C_g/C_0)**2<2(gamma-1)时，方程有1个解；当(C_g/C_0)**2>2(gamma-1)，且(C_g/C_0)**2<1时，方程有2个解；当(C_g/C_0)**2>2(gamma-1)，且(C_g/C_0)**2>1时，方程无解
+    当(C_g/C_0)**2<2(gamma-1)时, 方程有1个解; 
+    当(C_g/C_0)**2>2(gamma-1)，且(C_g/C_0)**2<1时, 方程有2个解; 
+    当(C_g/C_0)**2>2(gamma-1)，且(C_g/C_0)**2>1时, 方程无解
     '''
     func = lambda s_c: (1 / 2) * (
                 C0_Cg ** (-(4) / (gamma - 1)) * s_c ** ((2 * (2 * gamma - 3)) / (gamma - 1)) - 1) + (1) / (
