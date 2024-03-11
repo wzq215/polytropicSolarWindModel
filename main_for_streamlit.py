@@ -104,11 +104,12 @@ if __name__ == '__main__':
     s_c_i = 1  # 0 or 1, 0 for deceleration, 1 for acceleration
 
     gamma = 1.05
-    T0 = 2e6
+    T0_in_MK = 2e6 /1.e6
 
     # Add input fields for key parameters in the left sidebar
     gamma = st.sidebar.slider('gamma', 1.0, 2.0, 1.05)
-    T0 = st.sidebar.slider('T0', 1e6, 3e6, 2e6)
+    T0_in_MK = st.sidebar.slider('T0 [MK]', 1.0, 3.0, 2.0)
+    T0 = T0_in_MK * 1e6
 
     C0 = np.sqrt(gamma*kB*T0/mp)
     # C0_Cg = 0.8
@@ -116,11 +117,17 @@ if __name__ == '__main__':
     s_c,statu = solve_s_c(C0_Cg, gamma)
     # show the result
     # print(s_c)
+    st.sidebar.write('a (=(C0/Cg)^2): ', C0_Cg**2)
+    st.sidebar.write('s_c (radial distance of critical position in unit of r0): ', s_c)
 
     # All velocities are normalized by C0, all distances are normalized by r0
 
-    V02 = C0_Cg**(-2-4/(gamma-1))*s_c[s_c_i]**((3*gamma-5)/(gamma-1)) # actually V0/C0
-    Vc2 = C0_Cg**(-2)/s_c[s_c_i];
+    V02 = C0_Cg**(-2-4/(gamma-1))*s_c[s_c_i]**((3*gamma-5)/(gamma-1)) # actually (V0/C0)^2
+    Vc2 = C0_Cg**(-2)/s_c[s_c_i] # actually (Vc/C0)^2
+    
+    st.sidebar.write('V02 (square of velocity at r0 in unit of c0): ', V02)
+    st.sidebar.write('VC2 (square of sound speed at critical position in unit of c0): ', Vc2)
+
     args = [np.sqrt(V02), 1/C0_Cg, gamma]
     x0 = [1., np.sqrt(V02)]
     ts = np.linspace(0., s_c[s_c_i]-1., 801)
@@ -130,6 +137,14 @@ if __name__ == '__main__':
     ts = np.linspace(x0[0]-1, 100, 4001)
     sol2 = rkdumb(x0, ts, dx, args=args)
     sol = np.append(sol1, sol2, axis=0)
+
+    st.markdown("""
+        Solving the polytropic solar wind involves the following steps:
+        1. Define the inner boundary temperature and polytropic index.
+        2. Solve for the position of the sonic point. There may be no solution, there may be two solutions, or there may only be one decelerating solution.
+        3. Integrate inward and outward from the sonic point to obtain the variation of velocity with distance.
+            """)
+
     # sol1 = odeint(dx, x0, ts, args=(np.sqrt(V02), 1/C0_Cg))
     plt.plot(sol[:, 0], sol[:, 1], 'g')
     plt.xlabel('$r/r_0$', fontsize=13)
