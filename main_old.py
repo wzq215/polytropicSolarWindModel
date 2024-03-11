@@ -1,4 +1,4 @@
-# Evolution Model of Solar Wind Velocity in PolyTropic System
+# 多方关系的太阳�?�速度演化模型
 
 from scipy.optimize import fsolve
 import numpy as np
@@ -16,18 +16,18 @@ def solve_s_c(C0_Cg, gamma):
                                    gamma - 1) * (s_c*(C0_Cg)**2 - 1) - 2 * (s_c - 1)
     # solve the equation
     if (C0_Cg) ** 2 < 2 * (gamma - 1):
-        print("one solution at the sonic point")
+        print("声速点�?1�?�?")
         s_c = fsolve(func, 1)
         statu = np.isclose(func(s_c), 0.)
     elif (C0_Cg) ** 2 > 2 * (gamma - 1) and (C0_Cg) ** 2 < 1:
-        print("two solutions at the sonic point")
+        print("声速点�?2�?�?")
         s_c = fsolve(func, [1,10])
         if s_c[1]-s_c[0]<1e-5*s_c[1]:
             s_c = fsolve(func, [1,100])
         s_c.sort()
         statu = np.isclose(func(s_c),[0.,0.])
     else:
-        print("no solution at the sonic point")
+        print("声速点�?0�?�?")
         s_c = None
         statu=None
     return s_c,statu
@@ -35,9 +35,9 @@ def solve_s_c(C0_Cg, gamma):
 def dx(x,t,args):
     '''
     x=V
-    :param x: variables to be solved
-    :param r: solar centric distance
-    :return: derivative of x with respect to r
+    :param x: 求解的变�?
+    :param r: 距�??
+    :return: x对r的�?�数
     '''
     V0, Cg, gamma = args
     r=x[0]
@@ -48,14 +48,14 @@ def dx(x,t,args):
     dxdr = np.array([dx1,dx2])
     return dxdr
 
-# Fourth-order Runge-Kutta method
+# 四阶龙格库�?�法
 def rk4(x,t,dt,derivsRK,args=None):
     '''
-    :param x: variables to solve
-    :param t: time
-    :param dt: time step
-    :param derivsRK: derivative of x with respect to t
-    :return: derivative of x with respect to t
+    :param x: 求解的变�?
+    :param t: 时间
+    :param dt: 时间步长
+    :param derivsRK: x对t的�?�数
+    :return: x对t的�?�数
     '''
     # RK4 algorithm
     half_dt = 0.5*dt
@@ -71,14 +71,14 @@ def rk4(x,t,dt,derivsRK,args=None):
     xout = x + dt/6.*(F1 + F4 + 2.*(F2+F3))
     return xout
 
-# Given the time step, solve the change over a period of time
+# 给定时间步长，求解一段时间内的变�?
 def rkdumb(x,t,derivsRK,args=None):
     '''
-    :param x: variable to solve
-    :param t: time
-    :param nsteps: time step
-    :param derivsRK: derivative of x with respect to t
-    :return: derivative of x with respect to t
+    :param x: 求解的变�?
+    :param t: 时间
+    :param nsteps: 时间步长
+    :param derivsRK: x对t的�?�数
+    :return: x对t的�?�数
     '''
     # Integrate x(t) using RK4 method
     dt = t[1]-t[0]
@@ -98,7 +98,7 @@ if __name__ == '__main__':
     kB = 1.380649e-23
     mp = 1.672621637e-27 #kg
     Cg = np.sqrt(G*Msun/2/Rsun)
-    s_c_i = 1  # 0 or 1, 0 for deceleration, 1 for acceleration
+    s_c_i = 1  # 0 减�? 1 加�?
 
     gamma = 1.05
     T0 = 2e6
@@ -109,9 +109,9 @@ if __name__ == '__main__':
     # show the result
     # print(s_c)
 
-    # All velocities are normalized by C0, all distances are normalized by r0
+    # 所有的速度用C0归一化，所有的距�?�用r0归一�?
 
-    V02 = C0_Cg**(-2-4/(gamma-1))*s_c[s_c_i]**((3*gamma-5)/(gamma-1)) # actually V0/C0
+    V02 = C0_Cg**(-2-4/(gamma-1))*s_c[s_c_i]**((3*gamma-5)/(gamma-1))# 实际上是V0/C0
     Vc2 = C0_Cg**(-2)/s_c[s_c_i];
     args = [np.sqrt(V02), 1/C0_Cg, gamma]
     x0 = [1., np.sqrt(V02)]
