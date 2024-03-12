@@ -2,9 +2,7 @@ name: polytropicSolarWindModel
 channels:
   - defaults
 dependencies:
-  - python=3.10
   - numpy
   - matplotlib
   - scipy
   - streamlit
-prefix: /Users/ephe/opt/anaconda3/envs/polytropicSolarWindModel
