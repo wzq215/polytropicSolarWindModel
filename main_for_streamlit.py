@@ -146,13 +146,14 @@ if __name__ == '__main__':
             """)
 
     # sol1 = odeint(dx, x0, ts, args=(np.sqrt(V02), 1/C0_Cg))
+    fig = plt.figure() # ADD by WZQ
     plt.plot(sol[:, 0], sol[:, 1], 'g')
     plt.xlabel('$r/r_0$', fontsize=13)
     plt.ylabel('$V/C_0$', fontsize=13)
     plt.title('$\gamma=$'+str(gamma)+' $C_0/C_g=$'+"%.2f" % C0_Cg)
     # plt.grid()
     plt.box(on=True)
-    st.pyplot()
+    st.pyplot(fig) # CHANGE by WZQ
     plt.show()
     # plt.savefig("test.png")
     print(V02)
